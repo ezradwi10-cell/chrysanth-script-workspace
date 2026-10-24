@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#10111b">
+<title>Pulse — Engagement Rate Studio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--bg:#0d0e17;--panel:#151722;--panel2:#1b1e2b;--line:#292c3b;--text:#f4f5fb;--muted:#9a9eb2;--purple:#9b8cff;--mint:#78e7c4;--pink:#ff91bd;--blue:#7fc8ff;--radius:22px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#30265355,transparent 36%),radial-gradient(ellipse at 0% 35%,#173f4650,transparent 35%),var(--bg);color:var(--text);font:15px 'DM Sans',sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}
+.shell{max-width:1200px;margin:auto;padding:26px 28px 50px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:54px}
+.brand{display:flex;align-items:center;gap:11px;font:800 20px Manrope,sans-serif;letter-spacing:-.7px}.brandmark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--purple),#6e63e8);display:grid;place-items:center;color:#111322;box-shadow:0 6px 22px #8e7aff35}.brandmark svg{width:21px}
+.navright{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:13px}.live{width:7px;height:7px;background:var(--mint);border-radius:50%;display:inline-block;margin-right:7px;box-shadow:0 0 12px #78e7c4}
+.hero{display:flex;justify-content:space-between;align-items:end;gap:28px;margin-bottom:30px}.kicker{color:var(--mint);text-transform:uppercase;font-size:11px;font-weight:700;letter-spacing:2px}.hero h1{font:800 clamp(30px,4.5vw,48px)/1.1 Manrope,sans-serif;letter-spacing:-2px;margin:12px 0 12px}.hero h1 span{color:var(--purple)}.hero p{color:var(--muted);max-width:590px;line-height:1.7;margin:0}.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#171925;padding:10px 14px;border-radius:100px;color:#c4c7d7;font-size:12px;white-space:nowrap}
+.main{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);gap:22px;align-items:start}
+.panel{background:linear-gradient(160deg,#191b28,#131520);border:1px solid var(--line);border-radius:var(--radius);padding:25px;box-shadow:0 20px 70px #00000017}
+.panelhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.panelhead h2{font:700 17px Manrope;margin:0;letter-spacing:-.4px}.step{font-size:11px;color:var(--muted);border:1px solid var(--line);padding:6px 9px;border-radius:8px}
+.label{font-size:12px;font-weight:700;color:#c7cad8;display:block;margin:0 0 8px}.control{width:100%;background:#10121c;border:1px solid #303345;border-radius:12px;padding:13px 14px;color:var(--text);outline:none;transition:.2s}.control:focus{border-color:var(--purple);box-shadow:0 0 0 3px #9b8cff20}.control::placeholder{color:#5d6175}
+.platforms{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:22px}.platform{border:1px solid var(--line);border-radius:12px;background:#11131d;color:#aeb2c4;padding:11px 5px;display:flex;flex-direction:column;align-items:center;gap:7px;font-size:11px;font-weight:600;transition:.2s}.platform svg{width:20px;height:20px}.platform.active{border-color:#9485ff;background:#302b4a;color:#e3ddff;box-shadow:inset 0 0 0 1px #9485ff22}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin-bottom:17px}.helper{font-size:11px;color:#777c92;margin-top:7px;line-height:1.45}.divider{height:1px;background:var(--line);margin:22px 0}
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.metric{background:#10121c;border:1px solid #282b3a;border-radius:13px;padding:12px 13px}.metric label{font-size:11px;color:#a3a7ba;display:flex;align-items:center;gap:7px;margin-bottom:8px}.dot{width:7px;height:7px;border-radius:50%;display:inline-block}.metric input{background:transparent;border:0;color:var(--text);width:100%;font:700 18px Manrope;outline:none;padding:0}.metric input::placeholder{color:#51566b}
+.actions{display:flex;gap:10px;margin-top:22px}.btn{border:0;border-radius:12px;padding:13px 16px;font-weight:700;font-size:13px;transition:transform .15s,opacity .15s}.btn:active{transform:scale(.98)}.primary{background:var(--purple);color:#151323;flex:1;box-shadow:0 8px 22px #9b8cff24}.ghost{background:#242635;color:#d1d3e1;border:1px solid #333648}
+.resultpanel{position:sticky;top:20px}.resulttop{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.resulttop h2{font:700 17px Manrope;margin:0}.tag{font-size:11px;color:var(--mint);background:#1c3935;border:1px solid #28554c;padding:6px 9px;border-radius:8px}
+.score{position:relative;overflow:hidden;border-radius:19px;padding:23px;background:linear-gradient(135deg,#6558c9,#8c78f5 60%,#a38dff);color:white}.score:after{content:"";position:absolute;width:190px;height:190px;border:1px solid #ffffff24;border-radius:50%;right:-55px;top:-80px;box-shadow:0 0 0 25px #ffffff08,0 0 0 50px #ffffff05}.scorelabel{font-size:12px;color:#e5e0ff;position:relative;z-index:1}.scorevalue{font:800 clamp(42px,6vw,62px)/1.1 Manrope;letter-spacing:-2px;margin:9px 0 12px;position:relative;z-index:1}.scorefoot{font-size:12px;color:#e5e0ff;position:relative;z-index:1}.scorefoot b{color:#fff}.scoremini{display:flex;align-items:center;gap:8px;margin-top:18px;font-size:11px;color:#eeeaff;position:relative;z-index:1}.progress{height:5px;background:#ffffff3c;border-radius:20px;flex:1;overflow:hidden}.progress span{height:100%;display:block;background:#fff;border-radius:20px;width:0;transition:width .35s}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}.stat{background:#10121c;border:1px solid var(--line);border-radius:14px;padding:15px}.stat .caption{font-size:11px;color:var(--muted);display:flex;gap:7px;align-items:center}.stat strong{font:700 22px Manrope;display:block;margin-top:8px;letter-spacing:-.5px}.stat small{font-size:11px;color:#7d8298}
+.insight{display:flex;gap:12px;background:#182522;border:1px solid #28443d;border-radius:14px;padding:14px;margin-top:14px}.insighticon{width:30px;height:30px;border-radius:10px;background:#25443c;color:var(--mint);display:grid;place-items:center;flex-shrink:0}.insight h3{font-size:12px;margin:0 0 5px;color:#b7f4df}.insight p{font-size:11px;line-height:1.55;color:#a6c8bd;margin:0}
+.formula{margin-top:19px;padding-top:17px;border-top:1px solid var(--line);color:#858aa1;font-size:11px;line-height:1.7}.formula strong{color:#c6c9d8}.footer{display:flex;justify-content:space-between;gap:14px;color:#666b80;font-size:11px;margin-top:28px}.footer a{color:#9b8cff;text-decoration:none}
+@media(max-width:850px){.main{grid-template-columns:1fr}.resultpanel{position:static}.hero{align-items:start;flex-direction:column;margin-bottom:22px}nav{margin-bottom:35px}}
+@media(max-width:520px){.shell{padding:20px 13px 32px}.navright .navtext{display:none}.panel{padding:18px;border-radius:18px}.platforms{gap:6px}.platform{font-size:10px;padding:10px 2px}.two{gap:10px}.hero h1{letter-spacing:-1.4px}.footer{flex-direction:column}.score{padding:20px}.scorevalue{font-size:48px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<nav>
+  <div class="brand"><div class="brandmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 9 10l3.2 3.2L20 5.5"/><path d="M15 5.5h5v5"/></svg></div>pulse<span style="color:var(--purple)">.</span></div>
+  <div class="navright"><span><i class="live"></i><span class="navtext">Calculator is ready</span></span><span class="pill">CREATOR TOOLKIT&nbsp; ↗</span></div>
+</nav>
+<header class="hero">
+  <div><div class="kicker">Social analytics / 01</div><h1>Know your <span>influence.</span></h1><p>Ukur performa konten dan pahami seberapa aktif audiens kamu. Simple, cepat, dan siap jadi insight untuk campaign berikutnya.</p></div>
+  <div class="pill">✦ &nbsp; Engagement Rate Studio</div>
+</header>
+<div class="main">
+<section class="panel">
+  <div class="panelhead"><h2>Input your metrics</h2><span class="step">STEP 01 / 02</span></div>
+  <label class="label">Pilih platform</label>
+  <div class="platforms" id="platforms">
+    <button class="platform active" data-platform="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>Instagram</button>
+    <button class="platform" data-platform="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.6 7.2a6.4 6.4 0 0 1-4.1-1.5v9.1a5.8 5.8 0 1 1-5-5.7v3.1a2.7 2.7 0 1 0 1.9 2.6V2.5h3.1c.3 2.5 1.8 4.2 4.1 4.6z"/></svg>TikTok</button>
+    <button class="platform" data-platform="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2.5" y="5" width="19" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>YouTube</button>
+    <button class="platform" data-platform="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V10H7.3v3h2.8v8z"/></svg>Facebook</button>
+    <button class="platform" data-platform="Other"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Other</button>
+  </div>
+  <div class="field"><label class="label" for="method">Metode perhitungan</label><select class="control" id="method"><option value="followers">Engagement by Followers</option><option value="reach">Engagement by Reach</option><option value="views">Engagement by Views</option></select><div class="helper" id="methodHint">Interaksi dibandingkan dengan jumlah followers.</div></div>
+  <div class="field"><label class="label" id="baseLabel" for="base">Jumlah followers</label><input class="control" id="base" type="number" min="0" placeholder="Contoh: 105000" value="105000"></div>
+  <div class="divider"></div>
+  <label class="label">Engagement metrics</label>
+  <div class="metrics">
+    <div class="metric"><label><i class="dot" style="background:#ff91bd"></i>Likes</label><input id="likes" type="number" min="0" value="1200" placeholder="0"></div>
+    <div class="metric"><label><i class="dot" style="background:#9b8cff"></i>Comments</label><input id="comments" type="number" min="0" value="85" placeholder="0"></div>
+    <div class="metric"><label><i class="dot" style="background:#78e7c4"></i>Shares</label><input id="shares" type="number" min="0" value="120" placeholder="0"></div>
+    <div class="metric"><label><i class="dot" style="background:#7fc8ff"></i>Saves</label><input id="saves" type="number" min="0" value="210" placeholder="0"></div>
+  </div>
+  <div class="field" style="margin-top:14px;margin-bottom:0"><label class="label" for="other">Interaksi lainnya <span style="font-weight:400;color:#777c92">(optional)</span></label><input class="control" id="other" type="number" min="0" value="0" placeholder="Profile actions, reactions, etc."></div>
+  <div class="actions"><button class="btn primary" id="calculate">Calculate engagement ↗</button><button class="btn ghost" id="reset">Reset</button></div>
+</section>
+<section class="panel resultpanel">
+  <div class="resulttop"><h2>Your engagement</h2><span class="tag">● LIVE RESULT</span></div>
+  <div class="score">
+    <div class="scorelabel">Engagement rate</div><div class="scorevalue" id="rate">1.54%</div>
+    <div class="scorefoot" id="caption">Based on your followers</div>
+    <div class="scoremini"><span id="scoreLevel">Engagement score</span><div class="progress"><span id="progress"></span></div><b id="scoreNumber">31/100</b></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="caption">↗ &nbsp; Total interactions</div><strong id="total">1,615</strong><small>Combined engagement</small></div>
+    <div class="stat"><div class="caption">◎ &nbsp; Calculation base</div><strong id="baseResult">105K</strong><small id="baseSub">Followers</small></div>
+  </div>
+  <div class="insight"><div class="insighticon">✦</div><div><h3 id="insightTitle">Room to grow</h3><p id="insightText">Engagement kamu bisa ditingkatkan. Coba eksperimen dengan format konten dan ajakan interaksi.</p></div></div>
+  <div class="formula"><strong>Formula used</strong><br>ER = (Total interactions ÷ calculation base) × 100%<br><br><strong>Total interactions</strong> = Likes + Comments + Shares + Saves + Other interactions.<br><br>Benchmark bersifat indikatif. Performa dapat berbeda berdasarkan niche, platform, ukuran akun, dan format konten.</div>
+</section>
+</div>
+<div class="footer"><span>© 2026 Pulse Analytics · Made for creators</span><span>Privacy-friendly · Data stays in your browser</span></div>
+</div>
+<script>
+const $=id=>document.getElementById(id), num=id=>Math.max(0,Number($(id).value)||0);
+let platform='Instagram';
+function compact(n){return n>=1e6?(n/1e6).toLocaleString('id-ID',{maximumFractionDigits:1})+'M':n>=1e3?(n/1e3).toLocaleString('id-ID',{maximumFractionDigits:1})+'K':n.toLocaleString('id-ID')}
+function calculate(){
+ const method=$('method').value,base=num('base'),total=['likes','comments','shares','saves','other'].reduce((s,id)=>s+num(id),0),rate=base?total/base*100:0;
+ $('rate').textContent=rate.toLocaleString('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';$('total').textContent=total.toLocaleString('id-ID');$('baseResult').textContent=compact(base);
+ $('caption').textContent=method==='followers'?'Based on your followers':method==='reach'?'Based on your reach':'Based on your views';
+ $('baseSub').textContent=method==='followers'?'Followers':method==='reach'?'Accounts reached':'Video views';
+ const score=Math.min(100,Math.round(rate/10*100));$('progress').style.width=score+'%';$('scoreNumber').textContent=score+'/100';
+ let title,txt,level;
+ if(!base){title='Add your metrics';txt='Masukkan nilai basis perhitungan lebih dari 0 untuk melihat insight.';level='Waiting for data'}
+ else if(rate<1){title='Room to grow';txt='Engagement masih relatif rendah. Coba perkuat hook, relevansi konten, dan ajakan interaksi.';level='Low engagement'}
+ else if(rate<3){title='Building momentum';txt='Engagement berada di kisaran awal. Konsistensi dan konten yang relatable bisa membantu menaikkan respons.';level='Developing'}
+ else if(rate<6){title='Nice connection!';txt='Audiens cukup aktif merespons kontenmu. Pertahankan format yang menghasilkan interaksi.';level='Good engagement'}
+ else{title='Strong community';txt='Engagement terlihat tinggi. Pelajari konten dengan performa terbaik dan pertahankan kualitasnya.';level='High engagement'}
+ $('insightTitle').textContent=title;$('insightText').textContent=txt;$('scoreLevel').textContent=level;
+}
+function methodUpdate(){let m=$('method').value;$('baseLabel').textContent=m==='followers'?'Jumlah followers':m==='reach'?'Total reach':'Total views';$('methodHint').textContent=m==='followers'?'Interaksi dibandingkan dengan jumlah followers.':m==='reach'?'Interaksi dibandingkan dengan akun yang dijangkau.':'Interaksi dibandingkan dengan jumlah views.';calculate()}
+document.querySelectorAll('.platform').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.platform').forEach(x=>x.classList.remove('active'));b.classList.add('active');platform=b.dataset.platform}));
+['base','likes','comments','shares','saves','other'].forEach(id=>$(id).addEventListener('input',calculate));$('method').addEventListener('change',methodUpdate);$('calculate').addEventListener('click',calculate);
+$('reset').addEventListener('click',()=>{$('method').value='followers';$('base').value='';['likes','comments','shares','saves','other'].forEach(id=>$(id).value='');methodUpdate()});
+calculate();
+</script>
+</body></html>
