@@ -20,7 +20,7 @@
 <div class="field two"><div><div class="labelrow"><label class="label" for="duration">Duration</label></div><select class="select" id="duration"><option>15 seconds</option><option selected>30 seconds</option><option>45 seconds</option><option>60 seconds</option><option>90 seconds</option><option>3–5 minutes</option></select></div><div><div class="labelrow"><label class="label" for="language">Script language</label></div><select class="select" id="language"><option>Bahasa Indonesia</option><option>English</option><option>Indonesian + English</option></select></div></div>
 <div class="field"><div class="labelrow"><label class="label" for="brief">What do you want to create?</label><span class="hint">Your idea, your rules</span></div><textarea class="brief" id="brief" placeholder="Contoh: Aku mau bikin review hidden gem coffee shop di Surabaya. Highlight suasana vintage, menu signature, dan harga affordable. Bikin opening yang bikin orang penasaran..."></textarea></div>
 <div class="field"><div class="labelrow"><label class="label" for="cta">Call to action <span style="color:#798397;font-weight:400">(optional)</span></label></div><input class="input" id="cta" placeholder="Contoh: Save dulu buat weekend kamu!"></div>
-<button class="generate" id="generate">✦ Generate my script</button><div class="fine">Prototype preview · Demo output, not connected to a live AI API.</div>
+<button class="generate" id="generate">✦ Generate my script</button><div class="fine">Connected to Gemini AI via secure Cloudflare Worker.</div>
 </div></section>
 <section class="panel"><div class="head outhead"><div><strong><span class="step">02</span>Your script workspace</strong><div class="sub" style="margin:6px 0 0 32px">Your next idea, shaped into a story.</div></div><div class="actions"><button class="ghost" id="copy" disabled>Copy</button><button class="ghost" id="download" disabled>Export .txt</button></div></div><div class="body">
 <div class="empty" id="empty"><div class="emptyicon">✧</div><h3>Your next great idea starts here.</h3><p>Set your creative direction on the left, then generate a script. Your hook, scenes, voice-over, and caption will appear here.</p><div class="minis"><span>Scroll-stopping hook</span><span>Scene-by-scene</span><span>Ready-to-use CTA</span></div></div><div class="result" id="result"></div>
@@ -31,16 +31,26 @@ function chipGroup(id){$(id).addEventListener('click',e=>{if(e.target.classList.
 chipGroup('#tones');chipGroup('#types');$('#platform').addEventListener('click',e=>{if(e.target.tagName==='BUTTON'){[...$('#platform').children].forEach(x=>x.classList.remove('on'));e.target.classList.add('on')}});
 function toast(t){let el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(window.tt);window.tt=setTimeout(()=>el.style.display='none',2100)}
 function esc(t){return t.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function gen(){let brief=$('#brief').value.trim();if(!brief){$('#brief').focus();toast('Ceritakan dulu ide kontenmu ✨');return}
+async function gen(){
+let brief=$('#brief').value.trim();if(!brief){$('#brief').focus();toast('Ceritakan dulu ide kontenmu ✨');return}
 let niche=$('#niche').value,tone=$('#tones .on').textContent,type=$('#types .on').textContent,platform=$('#platform .on').textContent,duration=$('#duration').value,lang=$('#language').value,cta=$('#cta').value.trim()||'Follow untuk konten berikutnya!';
-let hook=lang==='English'?'Wait—this might be your next favorite.':`Stop scrolling dulu! ${niche==='Food & Beverage'?'Ada tempat yang wajib banget kamu tahu.':'Ada satu hal yang perlu kamu lihat sampai akhir.'}`;
-let vo1=brief,vo2=type==='Review'?'Tunjukkan detail paling menarik: suasana, pengalaman, atau fitur utama. Tambahkan close-up dan reaksi natural.':'Pecah ide utama jadi insight yang mudah dipahami. Gunakan visual relevan dan pacing dinamis.',vo3='Berikan satu takeaway yang jelas dan relatable. Pastikan penonton tahu kenapa ini penting buat mereka.';
-currentText=`CHRYSANTH CREATIVE WORKSPACE — SCRIPT\nNiche: ${niche}\nTone: ${tone}\nFormat: ${type}\nPlatform: ${platform}\nDuration: ${duration}\nLanguage: ${lang}\n\nHOOK\n${hook}\n\nSCENE 1 — INTRO\nVisual: Establishing shot / introduce the subject.\nVO: ${vo1}\n\nSCENE 2 — MAIN MOMENT\nVisual: Detail shots, natural movement, clear focal point.\nVO: ${vo2}\n\nSCENE 3 — TAKEAWAY\nVisual: Wrap-up, reaction, or key takeaway.\nVO: ${vo3}\n\nCTA\n${cta}\n\nCAPTION\n${brief} ${cta}\n#ContentCreator #${niche.replace(/[^a-z0-9]/gi,'')} #${type.replace(/\s/g,'')}`;
-$('#empty').style.display='none';$('#result').style.display='block';$('#copy').disabled=$('#download').disabled=false;
-$('#result').innerHTML=`<div class="rtitle">${esc(type)} Script</div><div class="rmeta">${esc(niche)} · ${esc(platform)} · ${esc(duration)} <span class="pill">Demo output</span></div><div class="hook"><small>THE HOOK · 0–3 SEC</small><strong>${esc(hook)}</strong></div>
-${[['SCENE 01 · INTRO','0–8 sec','Establishing shot, introduce the subject with a clean and inviting visual.',vo1],['SCENE 02 · THE MAIN MOMENT','8–20 sec','Detail shots, natural movement, and a clear focal point. Keep the cuts engaging.',vo2],['SCENE 03 · TAKEAWAY','20–27 sec','Wrap-up shot or reaction. Let the key message land.',vo3],['CTA · CLOSE','27–30 sec','On-screen text / VO: '+cta,'']].map((s,i)=>`<div class="scene"><div class="scenehead"><b>${s[0]}</b><span>${s[1]}</span></div><div class="scenebody"><p><b>Arahan visual:</b> ${esc(s[2])}</p>${i<3?`<p><b>Voice-over / dialog:</b> ${esc(s[3])}</p>`:''}</div></div>`).join('')}
-<div class="caption"><b>CAPTION</b><p>${esc(brief)} ${esc(cta)}<br><br>#ContentCreator #${esc(niche.replace(/[^a-z0-9]/gi,''))} #${esc(type.replace(/\s/g,''))}</p></div><div style="margin-top:12px"><span class="pill">Tone: ${esc(tone)}</span></div>`;
-toast('Script preview generated!')}
+const btn=$('#generate');btn.disabled=true;btn.textContent='✦ Generating with Gemini…';
+try{
+ const response=await fetch('https://shiny-voice-a96a.ezradwi10.workers.dev/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({brief,niche,tone,format:type,platform,duration,language:lang,cta})});
+ const data=await response.json();
+ if(!response.ok) throw new Error(data.error||`Request gagal (${response.status})`);
+ const script=data.script||data;
+ const hook=script.hook||'Hook belum tersedia';
+ const scenes=Array.isArray(script.scenes)?script.scenes:[];
+ currentText=`CHRYSANTH CREATIVE WORKSPACE — GEMINI SCRIPT\nNiche: ${niche}\nTone: ${tone}\nFormat: ${type}\nPlatform: ${platform}\nDuration: ${duration}\nLanguage: ${lang}\n\nHOOK\n${hook}\n\n`+scenes.map((s,i)=>`${s.scene||`SCENE ${i+1}`} (${s.duration||''})\nVisual: ${s.visual||''}\nVoice-over: ${s.voiceover||s.voice_over||s.dialogue||''}\n`).join('\n')+`\nCTA\n${script.cta||cta}\n\nCAPTION\n${script.caption||''}\n\nHASHTAGS\n${Array.isArray(script.hashtags)?script.hashtags.join(' '):(script.hashtags||'')}`;
+ $('#empty').style.display='none';$('#result').style.display='block';$('#copy').disabled=$('#download').disabled=false;
+ const safe=x=>esc(String(x||''));
+ $('#result').innerHTML=`<div class="rtitle">${safe(type)} Script</div><div class="rmeta">${safe(niche)} · ${safe(platform)} · ${safe(duration)} <span class="pill">Gemini AI</span></div><div class="hook"><small>THE HOOK</small><strong>${safe(hook)}</strong></div>`+
+ scenes.map((s,i)=>`<div class="scene"><div class="scenehead"><b>${safe(s.scene||`SCENE ${String(i+1).padStart(2,'0')}`)}</b><span>${safe(s.duration||'')}</span></div><div class="scenebody"><p><b>Arahan visual:</b> ${safe(s.visual||'')}</p><p><b>Voice-over / dialog:</b> ${safe(s.voiceover||s.voice_over||s.dialogue||'')}</p></div></div>`).join('')+
+ `<div class="scene"><div class="scenehead"><b>CTA · CLOSE</b></div><div class="scenebody">${safe(script.cta||cta)}</div></div><div class="caption"><b>CAPTION</b><p>${safe(script.caption||'')}</p><p>${safe(Array.isArray(script.hashtags)?script.hashtags.join(' '):(script.hashtags||''))}</p></div><div style="margin-top:12px"><span class="pill">Tone: ${safe(tone)}</span></div>`;
+ toast('Script berhasil dibuat dengan Gemini!');
+}catch(e){toast('Gagal generate: '+e.message);console.error(e)}finally{btn.disabled=false;btn.textContent='✦ Generate my script'}
+}
 $('#generate').addEventListener('click',gen);$('#copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(currentText);toast('Script copied!')}catch(e){toast('Clipboard unavailable in this browser.')}});
 $('#download').addEventListener('click',()=>{let blob=new Blob([currentText],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chrysanth-creative-script.txt';a.click();URL.revokeObjectURL(a.href);toast('Script exported!')});
 </script></body></html>
